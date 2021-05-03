@@ -8,9 +8,8 @@ const API = 'https://rickandmortyapi.com/api/character'
 
 export function getCharacters(page = 1){
     return function (dispatch){
-        console.log("ACTION",page)
         return axios(API + `/?page=${page}`)
-            .then(response => response.data.results)
+            .then(response => response.data)
             .then(payload => dispatch({
                 type: GET_CHARACTERS,
                 payload

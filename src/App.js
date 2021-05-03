@@ -1,10 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
-import List from './Containers/List'
+import CharactersView from './Containers/CharactersView/CharactersView'
+
+
 function App() {
   return (
     <div className="App">
-      <List/>
+      <CharactersView />
+
     </div>
   );
 }
