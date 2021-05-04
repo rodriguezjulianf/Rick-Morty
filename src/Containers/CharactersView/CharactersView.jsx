@@ -1,34 +1,35 @@
-import React, {Fragment, useState, useEffect} from 'react'
-import {useDispatch} from 'react-redux'
-import {getCharacters} from '../../Redux/Actions'
-import NavButtons from '../NavButtons/NavButtons'
-import List from '../List/List'
-
+import React, { Fragment, useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCharacters } from '../../Redux/Actions';
+import NavButtons from '../NavButtons/NavButtons';
+import List from '../List/List';
 
 export default function CharactersView() {
-    const [page, setPage] = useState(1)
-    const dispatch = useDispatch()
+  // const [page, setPage] = useState(1)
 
-    const handlerRequest =  (name) => {
-        const button = name
-        let newPage = button === "Prev" && page > 1 ?  page-1 : button === 'Next' ? page+1 : page
-        
-        setPage(newPage)
-        dispatch(getCharacters(newPage))
-    }
+  const apiInfo = useSelector((state) => state.pageList.info);
+  var { prev, next } = apiInfo ? apiInfo : { prev: null, next: null }; //ternario necesario porque sino hace el dispatch sin state y creashea.
+  const dispatch = useDispatch();
 
-    useEffect(()=> {dispatch(getCharacters())}, [])
+  const handlerRequest = (name) => {
+    let apiCall =
+      name === 'Prev' && prev ? prev : name === 'Next' ? next : null;
 
-    return (
-        <Fragment>
-            <NavButtons handlerRequest={handlerRequest} setPage={setPage}/>
+    // setPage(apiCall)
+    dispatch(getCharacters(apiCall));
+  };
 
-            <List />
+  useEffect(() => {
+    dispatch(getCharacters());
+  }, []);
 
-            <NavButtons handlerRequest={handlerRequest}/>
-        </Fragment>
-    )
+  return (
+    <Fragment>
+      <NavButtons handlerRequest={handlerRequest} />
+
+      <List />
+
+      <NavButtons handlerRequest={handlerRequest} />
+    </Fragment>
+  );
 }
-
-
-
